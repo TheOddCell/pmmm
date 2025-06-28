@@ -1,2 +1,21 @@
 # pmmm
-Package Manager Manager Manager - BUR helper
+Package Manager Manager Manager - [BUR](https://github.com/TheOddCell/bur) helper
+
+## What is the BUR?
+Check the BUR's repo [here](https://github.com/TheOddCell/bur).
+## How do I install `pmmm`?
+There are 2 methods, using `brl fetch` or installing from source.
+You must have git installed for both of these methods.
+* Use `brl fetch` if a normal user or BUR developer
+* Use installing from source if you are making edits to `pmmm`
+### Method 1: `brl fetch`
+Download the pmmm file from `https://github.com/TheOddCell/pmmm/blob/main/pmmm` and place it in `/bedrock/share/brl-fetch/distros`, then run `brl fetch pmmm` as root.
+### Method 2: Installing from source.
+Run the following commands as root:
+```
+mkdir /bedrock/strata/pmmm
+git clone https://github.com/TheOddCell/pmmm.git /bedrock/strata/pmmm # you may also copy the files you have done your stuff to to this directory
+brl show pmmm
+brl enable pmmm
+git submodule update --remote --merge
+```
