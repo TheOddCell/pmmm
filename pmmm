@@ -1,6 +1,6 @@
 #!/bedrock/libexec/busybox sh
 #
-# idlebox bootstrap support
+# pmmm bootstrap support
 #
 #      This is free and unencumbered software released into the public domain.
 #      Anyone is free to copy, modify, publish, use, compile, sell, or
@@ -19,6 +19,10 @@ trap 'exit' ERR
 
 check_supported() {
 	false
+}
+
+list_mirrors() {
+	echo "https://github.com/TheOddCell/pmmm.git/"
 }
 
 speed_test_url() {
@@ -52,7 +56,7 @@ fetch() {
     mkdir -p "${tmp_clone_dir}"
 
     step "Fetching pmmm to a temporary directory"
-    "${bootstrap_dir}/rootfs-x86_64-master/bin/git" clone "${target_mirror}" "${tmp_clone_dir}"
+    git clone "${target_mirror}" "${tmp_clone_dir}"
 
     step "Moving fetched rootfs to target directory"
     (
@@ -62,5 +66,9 @@ fetch() {
             mv "$f" "$target_dir/" || false
         done
     )
+    step "Ensuring pmmm is executable"
+    chmod a+x "${target_dir}/bin/pmmm"
+    step "Updating pmmm"
+    "${target_dir}/bin/pmmm" update
 }
 
