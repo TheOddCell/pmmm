@@ -1,0 +1,3 @@
+[submodule "usr/bur"]
+	path = usr/bur
+	url = https://github.com/TheOddCell/bur.git
