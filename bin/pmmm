@@ -120,11 +120,12 @@ case "$cmd" in
           if echo "$file" | grep -qE '^https?://'; then
             echo "Downloading $file to /bin/"
             /bedrock/libexec/curl -fLo "/bin/$filename" "$file" || false
+            chmod a+x "${dst}/${filename}"
           else
             src="/usr/bur/${pkg}/${file}"
-            dst="/bin/"
-            echo "Copying $src to $dst"
+            echo "Copying $src to /bin/"
             cp "$src" "$dst" || false
+            chmod a+x "$/bin/${filename}"
           fi
         done
         ;;
