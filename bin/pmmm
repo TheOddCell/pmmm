@@ -1,0 +1,210 @@
+#!/bedrock/libexec/busybox sh
+#
+# Package Manager Manager Manager
+#
+#      This is free and unencumbered software released into the public domain.
+#      Anyone is free to copy, modify, publish, use, compile, sell, or
+#      distribute this software, either in source code form or as a compiled
+#      binary, for any purpose, commercial or non-commercial, and by any means.
+#
+#      For more information, please refer to <https://unlicense.org/>
+#
+# Copyleft (ↄ) The Odd Cell <me@oddcell.ca>
+#
+. /bedrock/share/common-code
+trap - EXIT
+trap "echo 'an unexpected error occurred';exit 1" ERR
+
+pmmmversion=1.0.0
+
+parse_metadata() {
+  while IFS='=' read -r key value; do
+    [ -z "$key" ] && continue
+    eval "$key=\$value"
+  done < "$1"
+}
+
+ask_sure() {
+  echo -n "$1"
+  while :; do
+    read answer
+    case "${answer#?}" in
+      "") ;; # ignore empty or multi-char
+      *) answer=${answer%${answer#?}} ;; # only first char
+    esac
+    case "$answer" in
+      [Yy]) echo; return 0 ;;
+      [Nn]) echo; echo "Aborting."; exit 1 ;;
+      *) echo -n "Please answer Y or N: " ;;
+    esac
+  done
+}
+
+logo='
+_______________________
+\  _ \ \ \ \ \ \ \ \ \ \
+ \  __\_\_\_\_\_\_\_\_\_\
+  \_\  PMMM v'"${pmmmversion}"'
+'
+
+# Check if running as root
+require_root() {
+  if [ "$(id -u)" != 0 ]; then
+    echo "This command requires root privileges."
+    exit 1
+  fi
+}
+
+cmd="${1:-}"
+shift || true
+pkg="${1:-}"
+shift || true
+
+case "$cmd" in
+  update)
+    require_root
+    echo "Updating PMMM and BUR submodules..."
+    git pull || exit 1
+    git submodule update --init --recursive || exit 1
+    echo "Update complete."
+    ;;
+
+  install)
+    require_root
+    step_init 5
+    if [ -z "$pkg" ]; then
+      echo "pmmm install"
+      echo "Install a script or brl fetch script from the BUR."
+      echo "Examples:"
+      echo "# pmmm install fetch/idlebox # Add the idlebox brl fetch script"
+      echo "# pmmm install scripts/hello # Add the hello script"
+      exit 1
+    fi
+    echo "Installing $pkg."
+    step "Searching for package"
+    if [ ! -d "/usr/bur/$pkg" ]; then
+      echo "Package not found."
+      false
+    fi
+    step "Type: ${pkg%%/*}"
+    step "Parsing metadata"
+    parse_metadata "/usr/bur/$pkg/info.bur"
+    echo "Installing $pkg $version by $maintainer"
+    echo "URL: $url"
+    echo "Licensed under $licence"
+    ask_sure "Would you like to install? "
+    step "Starting install"
+
+    type="${pkg%%/*}"
+
+    case "$type" in
+      fetch)
+        for file in $files; do
+          # get basename (filename) from URL or path
+          filename=$(basename "$file")
+          if echo "$file" | grep -qE '^https?://'; then
+            echo "Downloading $file to /bedrock/share/brl-fetch/distros/"
+            /bedrock/libexec/curl -fLo "/bedrock/share/brl-fetch/distros/$filename" "$file" || false
+          else
+            src="/usr/bur/${pkg}/${file}"
+            dst="/bedrock/share/brl-fetch/distros/"
+            echo "Copying $src to $dst"
+            cp "$src" "$dst" || false
+          fi
+        done
+        ;;
+
+      script)
+        for file in $files; do
+          filename=$(basename "$file")
+          if echo "$file" | grep -qE '^https?://'; then
+            echo "Downloading $file to /bin/"
+            /bedrock/libexec/curl -fLo "/bin/$filename" "$file" || false
+          else
+            src="/usr/bur/${pkg}/${file}"
+            dst="/bin/"
+            echo "Copying $src to $dst"
+            cp "$src" "$dst" || false
+          fi
+        done
+        ;;
+
+      *)
+        echo "Unknown package type: $type"
+        false
+        ;;
+    esac
+    ;;
+
+  uninstall)
+    require_root
+    step_init 4
+    if [ -z "$pkg" ]; then
+      echo "pmmm uninstall"
+      echo "Uninstall a script or brl fetch script."
+      exit 1
+    fi
+    echo "Uninstalling $pkg."
+    step "Checking package existence in BUR"
+    if [ ! -d "/usr/bur/$pkg" ]; then
+      echo "Package not found in BUR."
+      false
+    fi
+    type="${pkg%%/*}"
+    case "$type" in
+      fetch)
+        target_dir="/bedrock/share/brl-fetch/distros/"
+        for file in $files; do
+          filename=$(basename "$file")
+          target_path="$target_dir$filename"
+          if [ -f "$target_path" ]; then
+            echo "Removing $target_path"
+            rm -f "$target_path" || false
+          else
+            echo "File $target_path does not exist."
+          fi
+        done
+        ;;
+      script)
+        # prevent removing pmmm itself
+        if [ "$pkg" = "script/pmmm" ] || [ "$pkg" = "script/pmmm.sh" ]; then
+          echo "Refusing to uninstall pmmm itself."
+          false
+        fi
+        for file in $files; do
+          filename=$(basename "$file")
+          target_path="/bin/$filename"
+          if [ -f "$target_path" ]; then
+            echo "Removing $target_path"
+            rm -f "$target_path" || false
+          else
+            echo "File $target_path does not exist."
+          fi
+        done
+        ;;
+      *)
+        echo "Unknown package type: $type"
+        false
+        ;;
+    esac
+    ;;
+
+  help|--help|-h|"")
+    echo "$logo"
+    echo "Bedrock User Repo Manager"
+    echo "Usage: pmmm <command> [args]"
+    echo "Commands:"
+    echo "  update     Update pmmm and BUR submodules"
+    echo "  install    Install a package (binary or fetch script)"
+    echo "  uninstall  Uninstall a package"
+    echo "  help       Show this help message"
+    exit 0
+    ;;
+
+  *)
+    echo "Unknown command: $cmd"
+    echo "Try 'pmmm help'"
+    exit 1
+    ;;
+esac
+
