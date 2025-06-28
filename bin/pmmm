@@ -71,7 +71,7 @@ case "$cmd" in
 
   install)
     require_root
-    step_init 5
+    step_init 3
     if [ -z "$pkg" ]; then
       echo "pmmm install"
       echo "Install a script or brl fetch script from the BUR."
@@ -86,7 +86,7 @@ case "$cmd" in
       echo "Package not found."
       false
     fi
-    step "Type: ${pkg%%/*}"
+    echo "Type: ${pkg%%/*}"
     step "Parsing metadata"
     parse_metadata "/usr/bur/$pkg/info.bur"
     echo "Installing $pkg $version by $maintainer"
@@ -120,11 +120,12 @@ case "$cmd" in
           if echo "$file" | grep -qE '^https?://'; then
             echo "Downloading $file to /bin/"
             /bedrock/libexec/curl -fLo "/bin/$filename" "$file" || false
+            chmod a+x "${dst}/${filename}"
           else
             src="/usr/bur/${pkg}/${file}"
-            dst="/bin/"
-            echo "Copying $src to $dst"
+            echo "Copying $src to /bin/"
             cp "$src" "$dst" || false
+            chmod a+x "$/bin/${filename}"
           fi
         done
         ;;
@@ -138,7 +139,7 @@ case "$cmd" in
 
   uninstall)
     require_root
-    step_init 4
+    step_init 2
     if [ -z "$pkg" ]; then
       echo "pmmm uninstall"
       echo "Uninstall a script or brl fetch script."
@@ -150,6 +151,7 @@ case "$cmd" in
       echo "Package not found in BUR."
       false
     fi
+    step "Removing Package"
     type="${pkg%%/*}"
     case "$type" in
       fetch)
