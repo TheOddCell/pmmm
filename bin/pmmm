@@ -73,7 +73,7 @@ case "$cmd" in
     echo "Updating PMMM and BUR submodules..."
     if [ -z "$pkg" ]; then
       /bedrock/libexec/busybox sh -c "
-        cd / && \
+        cd "/bedrock/strata/$(brl which)" && \
         git pull --recurse-submodules || exit 1 && \
         git submodule update --init --recursive || exit 1 && \
         git submodule foreach --recursive \"\
