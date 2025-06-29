@@ -18,7 +18,7 @@ trap 'fetch_abort "Unexpected error occurred."' EXIT
 trap 'exit' ERR
 
 check_supported() {
-	false
+	true
 }
 
 list_mirrors() {
