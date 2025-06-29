@@ -69,6 +69,6 @@ fetch() {
     step "Ensuring pmmm is executable"
     chmod a+x "${target_dir}/bin/pmmm"
     step "Updating pmmm"
-    (cd "${target_dir}" && "${target_dir}/bin/pmmm" update)
+    (cd "${target_dir}" && "${target_dir}/bin/pmmm" update foobar)
 }
 
