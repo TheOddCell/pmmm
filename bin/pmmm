@@ -16,11 +16,11 @@ trap - EXIT
 trap "echo 'an unexpected error occurred';exit 1" ERR
 set -e
 
-pmmmversion=1.1.2
+pmmmversion=1.2.0
 
 # PMMM Changelog
-# 1.1.1 -> 1.1.2
-# Fixed some stuff related to updating
+# 1.1.2 -> 1.2.0
+# Added Plugin support
 # 
 # - TheOddCell
 
@@ -245,8 +245,15 @@ case "$cmd" in
     ;;
 
   *)
-    echo "Unknown command: $cmd"
-    echo "Try 'pmmm help'"
-    exit 1
+    if [ -f "/bin/pmmm-${cmd}" ]; then
+      echo "Executing plugin pmmm-${cmd}"
+      "/bin/pmmm-${cmd}" "${pkg}"
+    else
+      echo "Unknown command: $cmd"
+      echo "Try 'pmmm help',           or"
+      echo "Install a  script plugin,  or"
+      echo "Install an executable plugin."
+      exit 1
+    fi
     ;;
 esac
