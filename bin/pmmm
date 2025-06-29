@@ -16,11 +16,11 @@ trap - EXIT
 trap "echo 'an unexpected error occurred';exit 1" ERR
 set -e
 
-pmmmversion=1.2.4
+pmmmversion=1.2.5
 
 # PMMM Changelog
-# 1.2.3 -> 1.2.4
-# Fix updating submodules
+# 1.2.3 -> 1.2.5
+# Bugfixes. Lots of them.
 # 
 # - TheOddCell
 
@@ -116,6 +116,7 @@ case "$cmd" in
     parse_metadata "/usr/bur/$pkg/info.bur"
     echo "Installing $pkg $version by $maintainer"
     echo "URL: $url"
+    echo "Description: $description"
     echo "Licensed under $licence"
     ask_sure "Would you like to install? "
     step "Starting install"
