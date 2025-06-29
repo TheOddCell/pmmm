@@ -76,33 +76,24 @@ case "$cmd" in
         cd / && \
         git pull --recurse-submodules || exit 1 && \
         git submodule update --init --recursive || exit 1 && \
-        git submodule foreach --recursive '
-          git checkout main || echo \"Warning: Could not checkout main in submodule \$(pwd)\"
-          git pull || echo \"Warning: Could not pull in submodule \$(pwd)\"
-        ' || exit 1
+        git submodule foreach --recursive \"\
+          git checkout main || echo \\\"Warning: Could not checkout main in submodule \\\$(pwd)\\\"; \
+          git pull || echo \\\"Warning: Could not pull in submodule \\\$(pwd)\\\"\
+        \" || exit 1
       "
     else
       /bedrock/libexec/busybox sh -c "
         git pull --recurse-submodules || exit 1 && \
         git submodule update --init --recursive || exit 1 && \
-        git submodule foreach --recursive '
-          git checkout main || echo \"Warning: Could not checkout main in submodule \$(pwd)\"
-          git pull || echo \"Warning: Could not pull in submodule \$(pwd)\"
-        ' || exit 1
+        git submodule foreach --recursive \"\
+          git checkout main || echo \\\"Warning: Could not checkout main in submodule \\\$(pwd)\\\"; \
+          git pull || echo \\\"Warning: Could not pull in submodule \\\$(pwd)\\\"\
+        \" || exit 1
       "
     fi
     echo "Update complete."
     ;;
 
-    else
-      /bedrock/libexec/busybox sh -c "
-        git pull --recurse-submodules || exit 1 && \
-        git submodule update --init --recursive || exit 1 && \
-        git submodule foreach --recursive git pull || exit 1
-      "
-    fi
-    echo "Update complete."
-    ;;
   install)
     require_root
     step_init 3
@@ -278,7 +269,6 @@ case "$cmd" in
     else
       echo "Unknown command: $cmd"
       echo "Try 'pmmm help',           or"
-      echo "Install a  script plugin,  or"
       echo "Install an executable plugin."
       exit 1
     fi
