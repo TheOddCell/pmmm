@@ -27,4 +27,8 @@ brl enable pmmm
 git submodule update --remote --merge
 ```
 ### Removal
-To remove pmmm, run the command `brl remove -d pmmm`. ***This will remove all scripts and not cleanly remove any fetch scripts. Please be sure to remove any installed packages before doing this.***
+To remove pmmm, run the command `brl remove -d pmmm`. ***This will remove all scripts and binaries and not cleanly remove any fetch scripts. Please be sure to remove any installed packages before doing this.***
+## Extending `pmmm`
+To add a new `pmmm` command, you must create a script/binary named `pmmm-[command]` where `[command]` is whatever command it is. For example, to create the command `pmmm foo` make a file named `pmmm-foo` or compile a file and name it `pmmm-foo`. The second argument (`bar` in `pmm foo bar`) will be passed in as the first argument in the script.
+
+If you would like to publish this extention, you can put it into the BUR. ([info](https://github.com/TheOddCell/bur/blob/main/CONTRIBUTING.md)) It must be published as an regular script or binary, with the diffrence being it will be named `pmmm-[command]`. The actual name of the package itself must also be the same name as the script/binary, with the exception being if it is a companion to another script/binary (say we have a command named `foo` and we have `pmm-foo` as an wrapper) or is in a group with multiple extentions.
