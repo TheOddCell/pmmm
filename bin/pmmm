@@ -16,11 +16,11 @@ trap - EXIT
 trap "echo 'an unexpected error occurred';exit 1" ERR
 set -e
 
-pmmmversion=1.2.1
+pmmmversion=1.2.2
 
 # PMMM Changelog
-# 1.2.0 -> 1.2.1
-# Added support for multiple arguments to a plugin
+# 1.2.1 -> 1.2.2
+# Realize that i messed up so bad tho
 # 
 # - TheOddCell
 
@@ -120,7 +120,7 @@ case "$cmd" in
         done
         ;;
 
-      script)
+      scripts)
         for file in $files; do
           filename=$(basename "$file")
           if echo "$file" | grep -qE '^https?://'; then
@@ -191,7 +191,7 @@ case "$cmd" in
           fi
         done
         ;;
-      script)
+      scripts)
         # prevent removing pmmm itself
         if [ "$pkg" = "scripts/pmmm" ]; then
           echo "Refusing to uninstall pmmm itself."
