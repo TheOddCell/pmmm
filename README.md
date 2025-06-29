@@ -3,6 +3,8 @@ Package Manager Manager Manager - [BUR](https://github.com/TheOddCell/bur) helpe
 
 ## What is the BUR?
 Check the BUR's repo [here](https://github.com/TheOddCell/bur).
+
+In short: it's the Bedrock Linux equivalent of the AUR - a place where users can publish and share fetch scripts or other utilities, even if it was not officially accepted.
 ## How do I install `pmmm`?
 There are 2 methods, using `brl fetch` or installing from source.
 You must have git installed for both of these methods.
@@ -14,8 +16,11 @@ Download the pmmm file from `https://github.com/TheOddCell/pmmm/blob/main/pmmm` 
 Run the following commands as root:
 ```
 mkdir /bedrock/strata/pmmm
-git clone https://github.com/TheOddCell/pmmm.git /bedrock/strata/pmmm # you may also copy the files you have done your stuff to to this directory
+git clone https://github.com/TheOddCell/pmmm.git /bedrock/strata/pmmm
+# you may also copy the files you have done your stuff to to this directory instead of git cloning to it
 brl show pmmm
 brl enable pmmm
 git submodule update --remote --merge
 ```
+### Removal
+To remove pmmm, run the command `brl remove -d pmmm`. ***This will remove all scripts and not cleanly remove any fetch scripts. Please be sure to remove any installed packages before doing this.***
