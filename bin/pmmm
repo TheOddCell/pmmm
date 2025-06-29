@@ -176,7 +176,7 @@ case "$cmd" in
         false
         ;;
     esac
-    echo "{readmepls}"
+    echo "${readmepls}"
     ;;
 
   uninstall)
