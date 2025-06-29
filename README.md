@@ -1,10 +1,14 @@
-# pmmm
-Package Manager Manager Manager - [BUR](https://github.com/TheOddCell/bur) helper
+```
+_______________________
+\  _ \ \ \ \ \ \ \ \ \ \ Package Manager
+ \  __\_\_\_\_\_\_\_\_\_\ Manager Manager
+  \_\ A BUR helper
+  ```
 
 ## What is the BUR?
 Check the BUR's repo [here](https://github.com/TheOddCell/bur).
 
-In short: it's the Bedrock Linux equivalent of the AUR - a place where users can publish and share fetch scripts or other utilities, even if it was not officially accepted.
+In short: it's the Bedrock Linux equivalent of the AUR - a place where users can publish and share fetch scripts or other utilities, even if it was not officially accepted by [paradigm](https://github.com/paradigm).
 ## How do I install `pmmm`?
 There are 2 methods, using `brl fetch` or installing from source.
 You must have git installed for both of these methods.
