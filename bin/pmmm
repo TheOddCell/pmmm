@@ -18,11 +18,9 @@ trap "echo 'an unexpected error occurred';exit 1" ERR
 pmmmversion=1.1.0
 
 # PMMM Changelog
-# 1.0.0 -> 1.1.0
-# Removed unnecicary method of checking if pmmm is to be removed
-# Added compatibility for binaries
-# Added changelog
-# Updated BUR Submodule (unnecessary, installation already does this)
+# 1.1.0 -> 1.1.1
+# Realized i forgot to add readmepls
+# 
 # - TheOddCell
 
 parse_metadata() {
@@ -159,6 +157,7 @@ case "$cmd" in
         false
         ;;
     esac
+    echo "{readmepls}"
     ;;
 
   uninstall)
