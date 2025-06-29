@@ -15,7 +15,15 @@
 trap - EXIT
 trap "echo 'an unexpected error occurred';exit 1" ERR
 
-pmmmversion=1.0.0
+pmmmversion=1.1.0
+
+# PMMM Changelog
+# 1.0.0 -> 1.1.0
+# Removed unnecicary method of checking if pmmm is to be removed
+# Added compatibility for binaries
+# Added changelog
+# Updated BUR Submodule (unnecessary, installation already does this)
+# - TheOddCell
 
 parse_metadata() {
   while IFS='=' read -r key value; do
@@ -100,7 +108,6 @@ case "$cmd" in
     case "$type" in
       fetch)
         for file in $files; do
-          # get basename (filename) from URL or path
           filename=$(basename "$file")
           if echo "$file" | grep -qE '^https?://'; then
             echo "Downloading $file to /bedrock/share/brl-fetch/distros/"
@@ -120,16 +127,33 @@ case "$cmd" in
           if echo "$file" | grep -qE '^https?://'; then
             echo "Downloading $file to /bin/"
             /bedrock/libexec/curl -fLo "/bin/$filename" "$file" || false
-            chmod a+x "${dst}/${filename}"
+            chmod a+x "/bin/$filename"
           else
             src="/usr/bur/${pkg}/${file}"
-            echo "Copying $src to /bin/"
+            dst="/bin/"
+            echo "Copying $src to $dst"
             cp "$src" "$dst" || false
-            chmod a+x "$/bin/${filename}"
+            chmod a+x "/bin/$filename"
           fi
         done
         ;;
 
+      "$(uname -m)")
+        for file in $files; do
+          filename=$(basename "$file")
+          if echo "$file" | grep -qE '^https?://'; then
+            echo "Downloading $file to /bin/"
+            /bedrock/libexec/curl -fLo "/bin/$filename" "$file" || false
+            chmod a+x "/bin/$filename"
+          else
+            src="/usr/bur/${pkg}/${file}"
+            dst="/bin/"
+            echo "Copying $src to $dst"
+            cp "$src" "$dst" || false
+            chmod a+x "/bin/$filename"
+          fi
+        done
+        ;;
       *)
         echo "Unknown package type: $type"
         false
@@ -169,7 +193,24 @@ case "$cmd" in
         ;;
       script)
         # prevent removing pmmm itself
-        if [ "$pkg" = "script/pmmm" ] || [ "$pkg" = "script/pmmm.sh" ]; then
+        if [ "$pkg" = "scripts/pmmm" ]; then
+          echo "Refusing to uninstall pmmm itself."
+          false
+        fi
+        for file in $files; do
+          filename=$(basename "$file")
+          target_path="/bin/$filename"
+          if [ -f "$target_path" ]; then
+            echo "Removing $target_path"
+            rm -f "$target_path" || false
+          else
+            echo "File $target_path does not exist."
+          fi
+        done
+        ;;
+      "$(uname -m)")
+        # prevent removing pmmm itself
+        if [ "$pkg" = "$(uname -m)/pmmm" ]; then
           echo "Refusing to uninstall pmmm itself."
           false
         fi
@@ -209,4 +250,3 @@ case "$cmd" in
     exit 1
     ;;
 esac
-

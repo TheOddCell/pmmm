@@ -1,3 +1,4 @@
 [submodule "usr/bur"]
-	path = usr/bur
-	url = https://github.com/TheOddCell/bur.git
+    path = usr/bur
+    url = https://github.com/TheOddCell/pmmm.git
+    branch = main
