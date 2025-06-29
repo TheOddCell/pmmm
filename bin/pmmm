@@ -14,6 +14,7 @@
 . /bedrock/share/common-code
 trap - EXIT
 trap "echo 'an unexpected error occurred';exit 1" ERR
+set -e
 
 pmmmversion=1.1.0
 
@@ -70,8 +71,8 @@ case "$cmd" in
   update)
     require_root
     echo "Updating PMMM and BUR submodules..."
-    git pull || exit 1
-    git submodule update --init --recursive || exit 1
+    /bedrock/libexec/busybox sh -c "cd /;git pull || exit 1"
+    /bedrock/libexec/busybox sh -c "cd /;git submodule update --init --recursive || exit 1"
     echo "Update complete."
     ;;
 
