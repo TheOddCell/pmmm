@@ -96,7 +96,7 @@ case "$cmd" in
 
   install)
     require_root
-    step_init 3
+    step_init 4
     if [ -z "$pkg" ]; then
       echo "pmmm install"
       echo "Install a script or brl fetch script from the BUR."
@@ -194,6 +194,8 @@ case "$cmd" in
       echo "Package not found in BUR."
       false
     fi
+    step "Pharsing Metadata"
+    parse_metadata "/usr/bur/$pkg/info.bur"
     step "Removing Package"
     type="${pkg%%/*}"
     case "$type" in
