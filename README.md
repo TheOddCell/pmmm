@@ -13,9 +13,11 @@ In short: it's the Bedrock Linux equivalent of the AUR - a place where users can
 There are 2 methods, using `brl fetch` or installing from source.
 You must have git installed for both of these methods.
 * Use `brl fetch` if a normal user or BUR developer
-* Use installing from source if you are making edits to `pmmm`
+* Use installing from source if you are making edits to `pmmm` itself
 ### Method 1: `brl fetch`
-Download the pmmm file from `https://github.com/TheOddCell/pmmm/blob/main/pmmm` and place it in `/bedrock/share/brl-fetch/distros`, then run `brl fetch pmmm` as root.
+Download the pmmm file from `https://github.com/TheOddCell/bur/blob/main/fetch/pmmm/pmmm` and place it in `/bedrock/share/brl-fetch/distros`, then run `brl fetch pmmm` as root.
+
+You may also use your desired BUR helper to install `pmmm` with the package `fetch/pmmm`.
 ### Method 2: Installing from source.
 Run the following commands as root:
 ```
