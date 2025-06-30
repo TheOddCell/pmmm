@@ -171,6 +171,7 @@ case "$cmd" in
             chmod a+x "/bin/$filename"
           fi
         done
+        step "Done installing"
         ;;
       *)
         echo "Unknown package type: $type"
@@ -182,7 +183,7 @@ case "$cmd" in
 
   uninstall)
     require_root
-    step_init 2
+    step_init 4
     if [ -z "$pkg" ]; then
       echo "pmmm uninstall"
       echo "Uninstall a script or brl fetch script."
@@ -228,6 +229,7 @@ case "$cmd" in
             echo "File $target_path does not exist."
           fi
         done
+        step "Done uninstalling"
         ;;
       "$(uname -m)")
         # prevent removing pmmm itself
