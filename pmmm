@@ -51,7 +51,7 @@ fetch() {
     step "Checking for git"
     command -v git >/dev/null 2>&1 || false
 
-    step "Fetching pmmm's rootfs"
+    step "Creating temporary clone directory"
     tmp_clone_dir="${bootstrap_dir}/tmp_git_clone"
     mkdir -p "${tmp_clone_dir}"
 
