@@ -19,7 +19,7 @@ set -e
 pmmmversion=1.2.5
 
 # PMMM Changelog
-# 1.2.3 -> 1.2.5
+# 1.2.4 -> 1.2.5
 # Bugfixes. Lots of them.
 # 
 # - TheOddCell
