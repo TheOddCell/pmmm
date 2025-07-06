@@ -16,11 +16,11 @@ trap - EXIT
 trap "echo 'an unexpected error occurred';exit 1" ERR
 set -e
 
-pmmmversion=1.2.5
+pmmmversion=1.2.6
 
 # PMMM Changelog
-# 1.2.4 -> 1.2.5
-# Bugfixes. Lots of them.
+# 1.2.5 -> 1.2.6
+# i can't get ssl to work :(
 # 
 # - TheOddCell
 
@@ -129,7 +129,7 @@ case "$cmd" in
           filename=$(basename "$file")
           if echo "$file" | grep -qE '^https?://'; then
             echo "Downloading $file to /bedrock/share/brl-fetch/distros/"
-            /bedrock/libexec/curl -fLo "/bedrock/share/brl-fetch/distros/$filename" "$file" || false
+            /bedrock/libexec/curl -fLko "/bedrock/share/brl-fetch/distros/$filename" "$file" || false
           else
             src="/usr/bur/${pkg}/${file}"
             dst="/bedrock/share/brl-fetch/distros/"
@@ -144,7 +144,7 @@ case "$cmd" in
           filename=$(basename "$file")
           if echo "$file" | grep -qE '^https?://'; then
             echo "Downloading $file to /bin/"
-            /bedrock/libexec/curl -fLo "/bin/$filename" "$file" || false
+            /bedrock/libexec/curl -fLko "/bin/$filename" "$file" || false
             chmod a+x "/bin/$filename"
           else
             src="/usr/bur/${pkg}/${file}"
@@ -161,7 +161,7 @@ case "$cmd" in
           filename=$(basename "$file")
           if echo "$file" | grep -qE '^https?://'; then
             echo "Downloading $file to /bin/"
-            /bedrock/libexec/curl -fLo "/bin/$filename" "$file" || false
+            /bedrock/libexec/curl -fLko "/bin/$filename" "$file" || false
             chmod a+x "/bin/$filename"
           else
             src="/usr/bur/${pkg}/${file}"
