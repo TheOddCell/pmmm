@@ -16,11 +16,11 @@ trap - EXIT
 trap "echo 'an unexpected error occurred';exit 1" ERR
 set -e
 
-pmmmversion=1.2.6
+pmmmversion=1.2.7
 
 # PMMM Changelog
-# 1.2.5 -> 1.2.6
-# i can't get ssl to work :(
+# 1.2.6 -> 1.2.7
+# update on each install
 # 
 # - TheOddCell
 
@@ -105,6 +105,7 @@ case "$cmd" in
       echo "# pmmm install scripts/hello # Add the hello script"
       exit 1
     fi
+    ${0} update
     echo "Installing $pkg."
     step "Searching for package"
     if [ ! -d "/usr/bur/$pkg" ]; then
